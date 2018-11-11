@@ -53,12 +53,12 @@ Enter a name and optional description for the Extension instance. Then, click Cr
 * select the latest extension version
 * your GCP project id. you can get your GCP project id from the GCP console.
 
-![image alt text](../media/image_gcp_product_id.png)
+![image alt text](../media/image_gcp_project_id.png)
 
 * Info types. Enter PHONE_NUMBER in uppercase
 * your GCP service account credentials in json format
 
-![image alt text](../media/image_apigee_extensions_dlp_config_creds.png)
+![image alt text](./media/image_apigee_extensions_dlp_config_creds.png)
 
 Click Save.
 
@@ -70,7 +70,7 @@ Click Save.
 
 ![image alt text](./media/image_apigee_extensions_dlp_deployed.png)
 
-*Congratulations!* ...You have now successfully configured and deployed an instance of the Informatica Extension on Apigee Edge.
+*Congratulations!* ...You have now successfully configured and deployed an instance of the Data Loss Prevention Extension on Apigee Edge.
 
 ## Develop an API proxy in Apigee Edge
 
@@ -107,8 +107,6 @@ Click Next.
 * Finally click *Build and Deploy* to deploy the proxy.
 
 11. Once the API proxy is successfully deployed, click the link to view it in the development editor in the Edge UI. From the Overview page, click the *Develop* tab at the top right. 
-
-![image alt text](./media/image_apigee_proxy_develop.png)
 
 # Update the Target Endpoint Preflow
 
@@ -184,18 +182,18 @@ We will use the [REST Client](https://apigee-rest-client.appspot.com/). Open the
 
 2. Click on the *Trace* tab in the top right of the Developer editor in the Edge UI.
 
-3. Copy the URL for your API proxy from the *Send Requests* section in the Apigee Edge UI. Click on the green *Start Trace Session* to start a trace session for your proxy.
-
-![image alt text](./media/image_apigee_proxy_trace.png)
+3. Click on the green *Start Trace Session* to start a trace session for your proxy.
 
 4. Paste the http://{your-org}-test.apigee.net/v1/employees/{empid} link into the REST Client to make a GET call, and observe the request/response in the Trace window of the Apigee Edge UI.
 
 5. You should see a success response similar to this -
-![image alt text](./media/image_apigee_proxy_success_response.png)
+![image alt text](./media/image_apigee_proxy_success_response_emp.png)
 
 # Summary
 
-That completes this hands-on lesson. In this simple lab you learned how to create and deploy a passthru API proxy on Apigee Edge for an existing backend process from Informatica Integration CLoud.
+That completes this hands-on lesson. In this simple lab you learned:
+* To create and deploy the Apigee Data Loss Prevention Extension
+* Develop an API proxy to retrieve and protect sensitive information from the backend service by using Google's DLP API
 
 # References
 
