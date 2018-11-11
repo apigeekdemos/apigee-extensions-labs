@@ -1,6 +1,6 @@
-# Setting up your Informatica Cloud Organization
+# Setting up your Backend Database
 
-*Duration : 40 mins*
+*Duration : 20 mins*
 
 *Persona : API Team*
 
