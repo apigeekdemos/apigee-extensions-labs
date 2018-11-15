@@ -3,10 +3,10 @@
     "db": {
       "employees": {
         ".read": true,
+        ".write": true,
         ".indexOn": ["name", "email"],
         "$employee": {
-          ".write": "newData.exists()",
-          ".validate": "newData.hasChildren(['name','image','birthDate','city','department','email','gender','isActive','street','postal','state']) && newData.child('isActive').isBoolean() && newData.child('name').val() === data.child('name').val()"
+          ".validate": "newData.hasChildren(['name','birthDate','city','department','email','gender','isActive','street','postal','state']) && newData.child('isActive').isBoolean() && newData.child('name').val() === data.child('name').val()"
         }
       }
     }
