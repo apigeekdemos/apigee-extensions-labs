@@ -35,7 +35,7 @@ In the next set of steps below you will create an instance of the Stackdriver Ex
 
 2. Select *Admin > Extensions* from the left navigation menu
 
-![image alt text](./media/image_apigee_extensions.png)
+![image alt text](../media/image_apigee_extensions.png)
 
 This page displays the list of existing Extension instances previously created in your Org, if any. Click on the *Add Extension* button in the top right to create a new extension.
 
@@ -68,7 +68,7 @@ Click Save.
 
 ![image alt text](./media/image_apigee_extensions_sd_deployed.png)
 
-*Congratulations!* ...You have now successfully configured and deployed an instance of the Data Loss Prevention Extension on Apigee Edge.
+*Congratulations!* ...You have now successfully configured and deployed an instance of the Stackdriver Logging Extension on Apigee Edge.
 
 ## Modify the Employees API proxy in Apigee Edge
 
@@ -83,7 +83,7 @@ In this flow, we first extract certain information from the request payload into
 
 * Attach an *ExtractVariables* policy to the /POST conditional flow, and modify it as shown to extract the employee name, email, department into 3 separate flow variables using *employee* as the variable name prefix. Click Save to save the proxy.
 
-![image alt text](./media/image_apigee_proxy_develop_ev_edit.png)
+![image alt text](./media/image_apigee_proxy_develop_evpolicy_edit.png)
 
 10. Next, add a Javascript policy to construct the log message using these flow variables in addition to the current timestamp. We also use the same policy to augment the input data with system generated fields. Save the proxy.
 
@@ -91,14 +91,14 @@ In this flow, we first extract certain information from the request payload into
 
 11. Once a successful response is received from the target, we then log the message to Stackdriver. To do this, we add an ExtensionCallout policy that references the Stackdriver extension previously configured in the Proxy Endpoint > default > /POST conditional flow response.
 
-![image alt text](./media/image_apigee_proxy_develop_ec_policy.png)
+![image alt text](./media/image_apigee_proxy_develop_ecpolicy.png)
 
 12. Update the ExtensionCallout policy to use the logMessage flow variable created by the JS policy in the earlier step.
 
 * Modify the policy to supply the name of the log, project_id metadata, and the logMessage variable containing the log message string.
 * Save and deploy the proxy.
 
-![image alt text](./media/image_apigee_proxy_develop_ec_policy_edit.png)
+![image alt text](./media/image_apigee_proxy_develop_ecpolicy_edit.png)
 
 
 ## Testing the API 
@@ -149,6 +149,6 @@ That completes this hands-on lesson. In this simple lab you learned:
 
 # References
 
-* [Google Stackdriver Logging Extension] (https://docs.apigee.com/api-platform/reference/extensions/google-stackdriver-logging-extension)
+* [Google Stackdriver Logging Extension](https://docs.apigee.com/api-platform/reference/extensions/google-stackdriver-logging-extension)
 
 
