@@ -97,7 +97,7 @@ definitions:
     items:
       type: object
       properties:
-        uuid:
+        id:
           type: string
         type:
           type: string
@@ -119,13 +119,6 @@ definitions:
           type: string
         isActive:
           type: boolean
-        metadata:
-          type: object
-          properties:
-            path:
-              type: string
-            size:
-              type: integer
         phone:
           type: string
         postal:
@@ -137,7 +130,7 @@ definitions:
   Employee:
     type: object
     properties:
-      uuid:
+      id:
         type: string
       type:
         type: string
@@ -159,13 +152,6 @@ definitions:
         type: string
       isActive:
         type: boolean
-      metadata:
-        type: object
-        properties:
-          path:
-            type: string
-          size:
-            type: integer
       phone:
         type: string
       postal:

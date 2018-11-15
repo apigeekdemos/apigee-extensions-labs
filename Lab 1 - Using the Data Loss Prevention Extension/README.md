@@ -82,7 +82,9 @@ In this set of steps, you will now develop an API in Apigee Edge that makes use 
 
 9. Select the *Reverse proxy (most commmon)* option and click the *Use OpenAPI* button. In the popup dialog, select *Upload File* tab, and: 
 
-* Click the arrow to select the OpenAPI specification *employees_oas.yaml* from the location in the github repo.
+NOTE: Please download the OAS spec from the github repo onto your local machine, and update the *host* entry in the spec file to use your own Apigee Edge organization name.
+
+* Click the arrow to select the OpenAPI specification *employees_oas.yaml* from your local machine.
 *NOTE*: Replace the {your_initials} with your own initials. 
 * Click the *Select* button
 * Click *Next* on the *Create Proxy* page
