@@ -1,4 +1,4 @@
-# Lab 1 - Using the Apigee Data Loss Prevention Extension
+# Lab 1 - Using the Data Loss Prevention Extension
 
 *Duration : 20 mins*
 
@@ -27,7 +27,7 @@ In this lab, we will see how to create a reverse proxy, that routes inbound requ
 
 # Instructions
 
-## Create and configure the Google Data Loss Prevention (DLP) Extension instance on Apigee Edge
+## Create and configure the Data Loss Prevention (DLP) Extension instance on Apigee Edge
 
 In the next set of steps below you will create an instance of the DLP Extension, configure it, and deploy it to the Apigee Edge *Test* environment.
 
@@ -35,7 +35,7 @@ In the next set of steps below you will create an instance of the DLP Extension,
 
 2. Select *Admin > Extensions* from the left navigation menu
 
-![image alt text](./media/image_apigee_extensions.png)
+![image alt text](../media/image_apigee_extensions.png)
 
 This page displays the list of existing Extension instances previously created in your Org, if any. Click on the *Add Extension* button in the top right to create a new extension.
 

@@ -12,6 +12,29 @@ The set of steps below allows you to setup a backend proxy and Firebase database
 
 # Instructions
 
+## Creating your GCP service account credentials
+
+All of the extensions labs use GCP services. In order to authenticate against these services from the API proxy, a service account must be created and configured.
+Please follow the instructions documented here to create and manage service accounts:
+
+* [Create and Manage Service Accounts](https://cloud.google.com/iam/docs/creating-managing-service-account-keys)
+
+* Grant roles to the service account
+Once the service account is created, you need to grant specific roles and permissions.
+
+1. Open the IAM & Admin page in the GCP console
+2. Select your GCP project from the drop-down list
+3. Identify the service account to which you want to add/edit a role
+
+![image alt text](./media/image_gcp_service_account.png)
+
+4. Select one or more roles to apply to the service account. Click +Add Role button and select the Logging > Logs Write role and permission
+
+![image alt text](./media/image_gcp_service_account_logging_role.png)
+
+5. Click Add or Save to apply the role to the service account
+
+
 ## Setting up Firebase backend (Optional)
 
 The API proxies used in the Extension lab exercises, reads and writes *employee* data in a Firebase database on Google Cloud Platform. This process below can be used to set up a new backend database. 
