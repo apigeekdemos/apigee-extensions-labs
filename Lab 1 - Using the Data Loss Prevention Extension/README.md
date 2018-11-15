@@ -197,6 +197,6 @@ That completes this hands-on lesson. In this simple lab you learned:
 
 # References
 
-* [Google Cloud Data Loss Prevention Extension] (https://docs.apigee.com/api-platform/reference/extensions/google-cloud-data-loss-prevention-extension)
+* [Google Cloud Data Loss Prevention Extension](https://docs.apigee.com/api-platform/reference/extensions/google-cloud-data-loss-prevention-extension)
 
 
