@@ -1,4 +1,4 @@
-# Lab 1 - Using the Data Loss Prevention Extension
+# Lab 2 - Using the Data Loss Prevention Extension
 
 *Duration : 20 mins*
 
@@ -14,7 +14,7 @@ Apigee Edge enables you to quickly expose backend services or workflows as APIs.
 
 The API proxy decouples your backend service implementation from the API that developers consume. This shields developers from future changes to your backend services. As you update backend services, developers, insulated from those changes, can continue to call the API uninterrupted.
 
-In this lab, we will see how to create a reverse proxy, that routes inbound requests to an existing backend, and returns the data after processing it through Google's Data Loss Prevention API using an Apigee Extension.
+In this lab, we will see how to enhance the employees proxy developed in Lab 1, to return the employee data after processing it through Google's Data Loss Prevention API using an Apigee Extension.
 
 # Pre-requisites
 
@@ -72,89 +72,39 @@ Click Save.
 
 *Congratulations!* ...You have now successfully configured and deployed an instance of the Data Loss Prevention Extension on Apigee Edge.
 
-## Develop an API proxy in Apigee Edge
+## Modify the Employees API proxy in Apigee Edge
 
-In this set of steps, you will now develop an API in Apigee Edge that makes use of the DLP Extension previously configured and deployed in the Edge *test* environment.
+8. Click on Develop > API Proxies from the left hand menu. This lists any existing API proxies in your Apigee Org. From the list of existing proxies, click the *employees* proxy to view it in the Develop editor. Click the Develop tab in the top right.
 
-8. Click on Develop > API Proxies. This lists any existing API proxies in your Apigee Org. Click the *+Proxy* button in the top right to create a new API proxy.
+# Develop the Proxy Endpoint GET /{employee-id} conditional flow
+This operation will handle GET requests to the employees proxy to retrieve an employee record from the backend database.
 
-![image alt text](./media/image_apigee_proxy_create.png)
+9. In order to fetch an individual employee from the Firebase backend database, we need to extract the employee-id passed in the proxy request path, and supply it to the backend api via filter query parameters.
 
-9. Select the *Reverse proxy (most commmon)* option and click the *Use OpenAPI* button. In the popup dialog, select *Upload File* tab, and: 
-
-NOTE: Please download the OAS spec from the github repo onto your local machine, and update the *host* entry in the spec file to use your own Apigee Edge organization name.
-
-* Click the arrow to select the OpenAPI specification *employees_oas.yaml* from your local machine.
-*NOTE*: Replace the {your_initials} with your own initials. 
-* Click the *Select* button
-* Click *Next* on the *Create Proxy* page
-* Fill out the field on this page:
-
-*Proxy name*: {your_initials}_employees
-*Proxy basepath*: Append a version to the default basepath: /v1/employees
-*Existing API*: https://infa-apijam-1537329947239.firebaseio.com/db/employees
-(NOTE: Replace the above Existing API url with your own, if you are using your own backend Firebase database)
-*Description*: Optionally, enter a description for the proxy
-
-![image alt text](./media/image_apigee_proxy_create_details.png)
-
-Click Next.
-
-10. Click thru the next set of pages to deploy the proxy.
- 
-* On the next page, leave all operations selected, and click Next. 
-* Select the *Passthru* option to allow the proxy to be called with no authorization. Click Next. 
-* Accept the default virtual hosts selected. This will deploy the proxy to both the default and secure virtual hosts on Apigee Edge. Click Next. 
-* Uncheck the *prod* environment checkbox and leave the *test* checkbox checked. This will deploy the API proxy only to the test environment. 
-* Finally click *Build and Deploy* to deploy the proxy.
-
-11. Once the API proxy is successfully deployed, click the link to view it in the development editor in the Edge UI. From the Overview page, click the *Develop* tab at the top right. 
+* In Proxy Endpoints > default > GET /{employee-id} flow, add an *ExtractVariables* policy in the request to extract the value of the *employee-id* passed as a path parameter in the api call, and store that value in a variable: *employeeId*
 
 # Update the Target Endpoint Preflow
 
-12. Since we are using Firebase as the backend, we need to update the target.url at runtime. To do this, select the *Target Endpoints > default > PreFlow in the left hand menu of the proxy editor in the UI.
+10. Next, in Target Endpoints > default, add a *Conditional* flow for the GET /{employee-id}
 
-* Click the +Step button in the graphical policy editor
-* Select the Javascript policy type and rename it in the popup dialog
+![image alt text](./media/image_apigee_proxy_create_flow.png)
+
+11. Add a Javascript policy to this conditional flow's request to update the target url as shown.
 
 ![image alt text](./media/image_apigee_proxy_develop_js.png)
 
-* Edit the Javascript policy as shown to rewrite the *target.url* system variable
+* Edit the Javascript policy as shown to rewrite the *target.url* system variable to include the proxy.pathsuffix and .json postfix
 * Click *Save* to save and deploy the API proxy
 
 ![image alt text](./media/image_apigee_proxy_develop_js_edit.png)
 
-## Testing the API 
-
-1. Let us test the newly built API proxy.
-We will use the [REST Client](https://apigee-rest-client.appspot.com/). Open the REST Client on a new browser window.  You can also use other REST clients (eg. Postman) for testing.
-
-2. Enter the proxy endpoint URL to fetch all employees into the REST Client to make a GET call, and observe the request/response
-URL: https://{your-edge-org}-test.apigee.net/v1/employees
-
-3. You should see a success response similar to this -
-![image alt text](./media/image_apigee_proxy_success_response.png)
-
-# Develop the GET /{employee-id} conditional flow
-
-13. In order to fetch an individual employee from the Firebase backend database, we need to extract the employee-id passed in the proxy request path, and supply it to the backend api via filter query parameters.
-
-* First, in Proxy Endpoints > default > GET /{employee-id} flow, add an *ExtractVariables* policy in the request to extract the value of the employee-id passed as a path parameter in the api call, and store that value in a variable: *employeeId*
-* Next, in Target Endpoints > default, add a *Conditional* flow for the GET /{employee-id}
-
-![image alt text](./media/image_apigee_proxy_create_flow.png)
-
-* Add a Javascript policy to this conditional flow's request to append query parameters to the target.url as shown
-
-![image alt text](./media/image_apigee_proxy_develop_js_filter.png) 
-
-14. Next, for any employee record returned we need to redact the employee phone number. We will use the DLP extension previously configured. Since the DLP policy takes a string as input, we need to first flatten the json object returned from the backend, as well as escape the " character in the employee json.
+12. Next, for any employee record returned we need to redact the employee phone number. We will use the DLP extension previously configured. Since the DLP policy takes a string as input, we need to first flatten the json object returned from the backend, as well as escape the " character in the employee json.
 
 You can do this using a JS policy in the Proxy Endpoints > default > GET /{employee-id} response conditional flow.
 
 ![image alt text](./media/image_apigee_proxy_develop_js_flatten.png)
 
-15. Add an Extension Callout policy to the Proxy Endpoints > default > GET /{employee-id} response conditional flow.
+13. Add an Extension Callout policy to the Proxy Endpoints > default > GET /{employee-id} response conditional flow.
 * In the policy popup, select the *Lab1dlp* instance previously created, then select the *deidentifyWithType* Action from the drop-down list. Apigee Edge automatically discovers all available workflows for this extension instance.
 
 ![image alt text](./media/image_apigee_proxy_develop_ecpolicy.png)
@@ -164,13 +114,13 @@ You can do this using a JS policy in the Proxy Endpoints > default > GET /{emplo
 
 ![image alt text](./media/image_apigee_proxy_develop_ecpolicy_edit.png)
 
-16. Set the output of the API proxy as the content of the extension's output variable *text* attribute. To do this, add an *AssignMessage* policy to the response of the GET /{employee-id} conditional flow. 
+14. Set the output of the API proxy as the content of the extension's output variable *text* attribute. To do this, add an *AssignMessage* policy to the response of the GET /{employee-id} conditional flow. 
 
 * Click on +Step button in the response flow, then select *AssignMessage* policy type in the popup dialog.
 
 ![image alt text](./media/image_apigee_proxy_develop_ampolicy.png)
 
-17. Edit the *AssignMessage* policy to remove the unused elements, set the payload content type, and content to come from the *{dlpEmployee.text}* variable, and set the *AssignTo* elements' type attribute to be *response*, as shown in the image below. Then, click Save to save and deploy the proxy changes.
+15. Edit the *AssignMessage* policy to remove the unused elements, set the payload content type, and content to come from the *{dlpEmployee.text}* variable, and set the *AssignTo* elements' type attribute to be *response*, as shown in the image below. Then, click Save to save and deploy the proxy changes.
 
 ![image alt text](./media/image_apigee_proxy_develop_ampolicy_edit.png)
 

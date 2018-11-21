@@ -1,4 +1,4 @@
-# Lab 2 - Using the Stackdriver Logging Extension
+# Lab 1 - Using the Stackdriver Logging Extension
 
 *Duration : 20 mins*
 
@@ -6,7 +6,7 @@
 
 # Use case
 
-Building on the API proxy developed in Lab 1, you now have a requirement to accept a POST request to your proxy inorder to create a new employee record in the backend database. As part of this requirement, the security and audit team within the organization mandates that all successful employee creation requests must be logged to an external system for audit and tracking purposes.
+You have to build and manage your employee database by exposing APIs that allow a client application to perform CRUD operations. For this lab you have a requirement to accept a POST request to your proxy inorder to create a new employee record in the backend database. As part of this requirement, the security and audit team within the organization mandates that all successful employee creation requests must be logged to an external system for audit and tracking purposes.
 
 # How can Apigee Edge help?
 
@@ -14,7 +14,7 @@ Apigee Edge enables you to quickly expose backend services or workflows as APIs.
 
 The API proxy decouples your backend service implementation from the API that developers consume. This shields developers from future changes to your backend services. As you update backend services, developers, insulated from those changes, can continue to call the API uninterrupted.
 
-In this lab, we will see how to enhance our employees proxy to create employee records in our backend database. As part of a successful request/response, an audit record is logged to Stackdriver using the Apigee Stackdriver extension.
+In this lab, we will see how to implement the employees proxy to create employee records in our backend database. As part of a successful request/response, an audit record is logged to Stackdriver using the Apigee Stackdriver extension.
 
 # Pre-requisites
 
@@ -70,14 +70,46 @@ Click Save.
 
 *Congratulations!* ...You have now successfully configured and deployed an instance of the Stackdriver Logging Extension on Apigee Edge.
 
-## Modify the Employees API proxy in Apigee Edge
+## Create the Employees API proxy in Apigee Edge
 
-In this set of steps, you will modify the employees API in Apigee Edge to make use of the Stackdriver Extension previously configured and deployed in the Edge *test* environment.
+In this set of steps, you will develop an API proxy in Apigee Edge that makes use of the Stackdriver Extension previously configured and deployed in the Edge *test* environment.
 
-8. Click on Develop > API Proxies from the left hand menu. This lists any existing API proxies in your Apigee Org. From the list of existing proxies, click the employees proxy to view it in the Develop editor. Click the Develop tab in the top right.
+8. Click on Develop > API Proxies. This lists any existing API proxies in your Apigee Org. Click the *+Proxy* button in the top right to create a new API proxy.
 
-9. Develop the Proxy Endpoint > default > /POST conditional flow in the left nav menu. 
-This operation will handle POST requests to the employees proxy that will create new employee records in the backend database.
+![image alt text](./media/image_apigee_proxy_create.png)
+
+9. Select the *Reverse proxy (most commmon)* option and click the *Use OpenAPI* button. In the popup dialog, select *Upload File* tab, and: 
+
+NOTE: Please download the OAS spec from the github repo onto your local machine, and update the *host* entry in the spec file to use your own Apigee Edge organization name.
+
+* Click the arrow to select the OpenAPI specification *employees_oas.yaml* from your local machine.
+*NOTE*: Replace the {your_initials} with your own initials. 
+* Click the *Select* button
+* Click *Next* on the *Create Proxy* page
+* Fill out the field on this page:
+
+*Proxy name*: {your_initials}_employees
+*Proxy basepath*: Append a version to the default basepath: /v1/employees
+*Existing API*: https://infa-apijam-1537329947239.firebaseio.com/db/employees
+(NOTE: Replace the above Existing API url with your own, if you are using your own backend Firebase database)
+*Description*: Optionally, enter a description for the proxy
+
+![image alt text](./media/image_apigee_proxy_create_details.png)
+
+Click Next.
+
+10. Click thru the next set of pages to deploy the proxy.
+ 
+* On the next page, leave all operations selected, and click Next. 
+* Select the *Passthru* option to allow the proxy to be called with no authorization. Click Next. 
+* Accept the default virtual hosts selected. This will deploy the proxy to both the default and secure virtual hosts on Apigee Edge. Click Next. 
+* Uncheck the *prod* environment checkbox and leave the *test* checkbox checked. This will deploy the API proxy only to the test environment. 
+* Finally click *Build and Deploy* to deploy the proxy.
+
+11. Once the API proxy is successfully deployed, click the link to view it in the development editor in the Edge UI. From the Overview page, click the *Develop* tab at the top right. 
+
+12. Develop the Proxy Endpoint > default > /POST conditional flow in the left nav menu. 
+This operation will handle POST requests to the employees proxy to create an employee record in the backend database.
 
 In this flow, we first extract certain information from the request payload into flow variables, which we will use to construct the log message to be logged in Stackdriver.
 
@@ -85,21 +117,27 @@ In this flow, we first extract certain information from the request payload into
 
 ![image alt text](./media/image_apigee_proxy_develop_evpolicy_edit.png)
 
-10. Next, add a Javascript policy to construct the log message using these flow variables in addition to the current timestamp. We also use the same policy to augment the input data with system generated fields. Save the proxy.
+## Modify the proxy TargetEndpoint to construct the log message, and rewrite the target url
+
+13. Next, add a Javascript policy to construct the log message using these flow variables in addition to the current timestamp. We also use the same policy to augment the input data with system generated fields, employee id. 
+
+* We add this policy in the Target Endpoint > default > /POST conditional flow request.
+* We will also re-write the target url to POST the request to the backend in this JS. 
 
 ![image alt text](./media/image_apigee_proxy_develop_js_edit.png)
 
-11. Once a successful response is received from the target, we then log the message to Stackdriver. To do this, we add an ExtensionCallout policy that references the Stackdriver extension previously configured in the Proxy Endpoint > default > /POST conditional flow response.
+Save the proxy.
+
+14. Once a successful response is received from the target, we then log the message to Stackdriver. To do this, we add an ExtensionCallout policy that references the Stackdriver extension previously configured; in the Target Endpoint > default > /POST conditional flow response.
 
 ![image alt text](./media/image_apigee_proxy_develop_ecpolicy.png)
 
-12. Update the ExtensionCallout policy to use the logMessage flow variable created by the JS policy in the earlier step.
+15. Update the ExtensionCallout policy to use the logMessage flow variable created by the JS policy in the earlier step.
 
 * Modify the policy to supply the name of the log, project_id metadata, and the logMessage variable containing the log message string.
 * Save and deploy the proxy.
 
 ![image alt text](./media/image_apigee_proxy_develop_ecpolicy_edit.png)
-
 
 ## Testing the API 
 
