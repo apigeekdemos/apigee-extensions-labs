@@ -76,20 +76,16 @@ Click Save.
 
 8. Click on Develop > API Proxies from the left hand menu. This lists any existing API proxies in your Apigee Org. From the list of existing proxies, click the *employees* proxy to view it in the Develop editor. Click the Develop tab in the top right.
 
-# Develop the Proxy Endpoint GET /{employee-id} conditional flow
+# Develop the GET /{employee-id} conditional flow
 This operation will handle GET requests to the employees proxy to retrieve an employee record from the backend database.
 
-9. In order to fetch an individual employee from the Firebase backend database, we need to extract the employee-id passed in the proxy request path, and supply it to the backend api via filter query parameters.
+# Update the Target Endpoint GET /{employee-id} conditional flow
 
-* In Proxy Endpoints > default > GET /{employee-id} flow, add an *ExtractVariables* policy in the request to extract the value of the *employee-id* passed as a path parameter in the api call, and store that value in a variable: *employeeId*
-
-# Update the Target Endpoint Preflow
-
-10. Next, in Target Endpoints > default, add a *Conditional* flow for the GET /{employee-id}
+9. In Target Endpoints > default, add a *Conditional* flow for the GET /{employee-id}, if it does not exist already.
 
 ![image alt text](./media/image_apigee_proxy_create_flow.png)
 
-11. Add a Javascript policy to this conditional flow's request to update the target url as shown.
+10. Add a Javascript policy to this conditional flow's request to update the target url as shown.
 
 ![image alt text](./media/image_apigee_proxy_develop_js.png)
 
@@ -98,29 +94,29 @@ This operation will handle GET requests to the employees proxy to retrieve an em
 
 ![image alt text](./media/image_apigee_proxy_develop_js_edit.png)
 
-12. Next, for any employee record returned we need to redact the employee phone number. We will use the DLP extension previously configured. Since the DLP policy takes a string as input, we need to first flatten the json object returned from the backend, as well as escape the " character in the employee json.
+11. Next, for any employee record returned we need to redact the employee phone number. We will use the DLP extension previously configured. Since the DLP policy takes a string as input, we need to first flatten the json object returned from the backend, as well as escape the " character in the employee json.
 
 You can do this using a JS policy in the Proxy Endpoints > default > GET /{employee-id} response conditional flow.
 
 ![image alt text](./media/image_apigee_proxy_develop_js_flatten.png)
 
-13. Add an Extension Callout policy to the Proxy Endpoints > default > GET /{employee-id} response conditional flow.
+12. Add an Extension Callout policy to the Proxy Endpoints > default > GET /{employee-id} response conditional flow.
 * In the policy popup, select the *Lab1dlp* instance previously created, then select the *deidentifyWithType* Action from the drop-down list. Apigee Edge automatically discovers all available workflows for this extension instance.
 
 ![image alt text](./media/image_apigee_proxy_develop_ecpolicy.png)
 
-* Edit the policy to supply its input, which will be the *response.content* variable. Also, change the name of the output variable. This variable will contain the output of the extension after the DLP extension executes. 
+* Edit the policy to supply its input, which will be the *response.content* variable. Also, change the name of the output variable. This variable will contain the output of the extension after the DLP extension executes.
 * Click Save to save and deploy the proxy.
 
 ![image alt text](./media/image_apigee_proxy_develop_ecpolicy_edit.png)
 
-14. Set the output of the API proxy as the content of the extension's output variable *text* attribute. To do this, add an *AssignMessage* policy to the response of the GET /{employee-id} conditional flow. 
+13. Set the output of the API proxy as the content of the extension's output variable *text* attribute. To do this, add an *AssignMessage* policy to the response of the GET /{employee-id} conditional flow. 
 
 * Click on +Step button in the response flow, then select *AssignMessage* policy type in the popup dialog.
 
 ![image alt text](./media/image_apigee_proxy_develop_ampolicy.png)
 
-15. Edit the *AssignMessage* policy to remove the unused elements, set the payload content type, and content to come from the *{dlpEmployee.text}* variable, and set the *AssignTo* elements' type attribute to be *response*, as shown in the image below. Then, click Save to save and deploy the proxy changes.
+14. Edit the *AssignMessage* policy to remove the unused elements, set the payload content type, and content to come from the *{dlpEmployee.text}* variable, and set the *AssignTo* elements' type attribute to be *response*, as shown in the image below. Then, click Save to save and deploy the proxy changes.
 
 ![image alt text](./media/image_apigee_proxy_develop_ampolicy_edit.png)
 
