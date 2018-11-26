@@ -4,12 +4,14 @@
       "employees": {
         ".read": true,
         ".write": true,
-        ".indexOn": ["name", "email"],
+        ".indexOn": ["id", "name", "email"],
         "$employee": {
-          ".validate": "newData.hasChildren(['name','birthDate','city','department','email','gender','isActive','street','postal','state']) && newData.child('isActive').isBoolean() && newData.child('name').val() === data.child('name').val()"
-        }
-      }
-    }
-  }
+          	".validate": "newData.hasChildren(['id','name','birthDate','city','department','email','phone','gender','isActive','street','postal','state','modified','created']) && newData.child('isActive').isBoolean() && newData.child('modified').isNumber() && newData.child('created').isNumber()",
+            "imageurl": {
+            	".validate": "newData.isString()"
+          	}
+      	}
+    	}
+  	}
+	}
 }
-

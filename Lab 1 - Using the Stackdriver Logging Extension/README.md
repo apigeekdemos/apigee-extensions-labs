@@ -122,17 +122,27 @@ In this flow, we first extract certain information from the request payload into
 13. Next, add a Javascript policy to construct the log message using these flow variables in addition to the current timestamp. We also use the same policy to augment the input data with system generated fields, employee id. 
 
 * We add this policy in the Target Endpoint > default > /POST conditional flow request.
-* We will also re-write the target url to POST the request to the backend in this JS. 
+* We will also re-write the target url to send the request to the backend in this JS. 
 
 ![image alt text](./media/image_apigee_proxy_develop_js_edit.png)
 
+14. Next, we need to update the HTTP verb on the request from POST to PATCH since we are updating the existing *employees* data in the backend Firebase database. 
+
+* To do this, add an *AssignMessage* policy as shown. This policy also saves the original value of the incoming request.verb variable for use later.
+
+![image alt text](./media/image_apigee_proxy_develop_am_verb.png)
+
 Save the proxy.
 
-14. Once a successful response is received from the target, we then log the message to Stackdriver. To do this, we add an ExtensionCallout policy that references the Stackdriver extension previously configured; in the Target Endpoint > default > /POST conditional flow response.
+15. Once a successful response is received from the target, we then log the message to Stackdriver. To do this, we add an ExtensionCallout policy that references the Stackdriver extension previously configured; in the Target Endpoint > default > /POST conditional flow response.
+NOTE: This is a separate flow that uses the previously saved value of the request.verb variable.
+To create this flow, simply copy/paste the previous flow and edit it accordingly, as shown below:
+
+![image alt text](./media/image_apigee_proxy_develop_log_flow.png)
+
+16. Update the ExtensionCallout policy to use the logMessage flow variable created by the JS policy in the earlier step.
 
 ![image alt text](./media/image_apigee_proxy_develop_ecpolicy.png)
-
-15. Update the ExtensionCallout policy to use the logMessage flow variable created by the JS policy in the earlier step.
 
 * Modify the policy to supply the name of the log, project_id metadata, and the logMessage variable containing the log message string.
 * Save and deploy the proxy.
