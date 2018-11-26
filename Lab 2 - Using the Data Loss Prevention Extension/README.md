@@ -94,7 +94,7 @@ This operation will handle GET requests to the employees proxy to retrieve an em
 
 ![image alt text](./media/image_apigee_proxy_develop_js_edit.png)
 
-11. Next, for any employee record returned we need to redact the employee phone number. We will use the DLP extension previously configured. Since the DLP policy takes a string as input, we need to first flatten the json object returned from the backend, as well as escape the " character in the employee json.
+11. Next, for any employee record returned we need to redact the employee phone number. We will use the DLP extension previously configured. Since the DLP policy takes a string as input, we need to escape the " character in the employee json.
 
 You can do this using a JS policy in the Proxy Endpoints > default > GET /{employee-id} response conditional flow.
 
