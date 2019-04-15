@@ -20,9 +20,7 @@ The labs use GCP service account credentials to access GCP services. Please foll
 3. Setup Backend Database (Optional)
 In order for the Apigee Extenions labs to function, you will also need to use a backend database to route requests and fetch data.
 NOTE: This step needs to only be done if you want to setup your own backend Firebase database. If you are interested only in completing the Extensions lab exercises, you can skip this step and directly use the pre-created *Extensions Backend Database* as documented in the indvidual labs.
-If you want to setup your own extensions backend Firebase database to use in the labs, please make sure to follow the instructions documented in the folder: 
-
-[setup](./setup/README.md)
+If you want to setup your own extensions backend Firebase database to use in the labs, please make sure to follow the instructions documented in the [setup](./setup/README.md) folder.
 
 #### Apigee Community 
 If you have any questions/comments please visit https://community.apigee.com/index.html
