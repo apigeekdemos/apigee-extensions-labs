@@ -20,6 +20,7 @@ Please follow the instructions documented here to create and manage service acco
 * [Create and Manage Service Accounts](https://cloud.google.com/iam/docs/creating-managing-service-account-keys)
 
 * Grant roles to the service account
+
 Once the service account is created, you need to grant specific roles and permissions.
 
 1. Open the IAM & Admin page in the GCP console
