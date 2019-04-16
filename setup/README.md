@@ -27,11 +27,11 @@ Once the service account is created, you need to grant specific roles and permis
 2. Select your GCP project from the drop-down list
 3. Identify the service account to which you want to add/edit a role
 
-![image alt text](./media/image_gcp_service_account.png)
+![image alt text](./media/image_gcp_svc_account.png)
 
 4. Select one or more roles to apply to the service account. Click +Add Role button and select the Logging > Logs Write role and permission
 
-![image alt text](./media/image_gcp_service_account_logging_role.png)
+![image alt text](./media/image_gcp_svc_account_logging_role.png)
 
 5. Click Add or Save to apply the role to the service account
 
